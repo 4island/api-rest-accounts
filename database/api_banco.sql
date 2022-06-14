@@ -58,6 +58,12 @@ CREATE TABLE `cuenta` (
 INSERT INTO `cuenta` (`numero_de_cuenta`, `numero_de_cliente`, `monto`) VALUES
 (1, 1, 0),
 (2, 1, 100000);
+(3, 1, 300),
+(4, 1, 500),
+(5, 1, 30000),
+(6, 1, 50000),
+(7, 1, 300),
+(8, 2, 100000);
 
 --
 -- Indices de la tabla `cuenta`
@@ -84,34 +90,46 @@ COMMIT;
 --
 
 CREATE TABLE `transferencia` (
-  `id_transferencia` int(11) NOT NULL,
+  `numero_transferencia` int(11) NOT NULL,
   `numero_cuenta_origen` int(11) NOT NULL,
   `numero_cuenta_destino` int(11) NOT NULL,
-  `id_cliente` int(11) NOT NULL,
+  `numero_de_cliente` int(11) NOT NULL,
   `monto` int(11) NOT NULL,
   `timestamp` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+
 --
 -- Índices para tablas volcadas
+--
+--
+-- Volcado de datos para la tabla `transferencia`
+--
+
+INSERT INTO `transferencia` (`numero_transferencia`, `numero_cuenta_origen`, `numero_cuenta_destino`, `numero_de_cliente`, `monto`, `timestamp`) VALUES
+(1, 2, 1, 1, 50000, '2022-06-06 17:35:35'),
+(2, 1, 2, 1, 500, '2022-06-10 18:41:33'),
+(3, 1, 2, 1, 500, '2022-06-10 18:43:40'),
+(4, 1, 2, 1, 200, '2022-06-13 22:10:56');
+
+--
+-- Indices de la tabla `transferencia`
+--
+ALTER TABLE `transferencia`
+  ADD PRIMARY KEY (`numero_transferencia`),
+  ADD KEY `numero_cuenta_destino` (`numero_cuenta_destino`),
+  ADD KEY `numero_cuenta_origen` (`numero_cuenta_origen`),
+  ADD KEY `id_cliente` (`numero_de_cliente`);
+
+--
+-- AUTO_INCREMENT de las tablas volcadas
 --
 
 --
 -- AUTO_INCREMENT de la tabla `transferencia`
 --
 ALTER TABLE `transferencia`
-  MODIFY `id_transferencia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
-
---
--- Indices de la tabla `transferencia`
---
-ALTER TABLE `transferencia`
-  ADD PRIMARY KEY (`id_transferencia`),
-  ADD KEY `numero_cuenta_destino` (`numero_cuenta_destino`),
-  ADD KEY `id_transferencia` (`id_transferencia`),
-  ADD KEY `numero_cuenta_origen` (`numero_cuenta_origen`),
-  ADD KEY `id_cliente` (`id_cliente`);
+  MODIFY `numero_transferencia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 
 --
 -- Restricciones para tablas volcadas
@@ -121,7 +139,7 @@ ALTER TABLE `transferencia`
 -- Filtros para la tabla `transferencia`
 --
 ALTER TABLE `transferencia`
-  ADD CONSTRAINT `transferencia_ibfk_1` FOREIGN KEY (`id_cliente`) REFERENCES `cliente` (`numero_de_cliente`),
+  ADD CONSTRAINT `transferencia_ibfk_1` FOREIGN KEY (`numero_de_cliente`) REFERENCES `cliente` (`numero_de_cliente`),
   ADD CONSTRAINT `transferencia_ibfk_2` FOREIGN KEY (`numero_cuenta_destino`) REFERENCES `cuenta` (`numero_de_cuenta`),
   ADD CONSTRAINT `transferencia_ibfk_3` FOREIGN KEY (`numero_cuenta_origen`) REFERENCES `cuenta` (`numero_de_cuenta`);
 COMMIT;

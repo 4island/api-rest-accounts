@@ -57,7 +57,7 @@ const getTransfers = async (req: Request, res: Response) => {
         const clientNumber = req.params.clientNumber;
         const result = await transfer.model.findAll({
             where: {
-                numero_de_cliente: 1,
+                numero_de_cliente: clientNumber,
             }
         });
         res.json(result);
@@ -84,7 +84,7 @@ const getAmount = async (cOrigen: any, cliente: any) => {
 
 const uploadSourceAccount = async (sourceAmount: any, newAmount: any, client: any) => {
     const oldAmount = await getAmount(sourceAmount, client) as any;
-    await account.model.update({ monto: (oldAmount ? oldAmount - newAmount : newAmount) }, {
+    await account.model.update({ monto: (oldAmount ? Number(oldAmount) - Number(newAmount) : newAmount) }, {
         where: {
             numero_de_cliente: client,
             numero_de_cuenta: sourceAmount
@@ -94,7 +94,7 @@ const uploadSourceAccount = async (sourceAmount: any, newAmount: any, client: an
 
 const uploadPostingAccount = async (postingAccount: any, newAmount: any, client: any) => {
     const oldAmount = await getAmount(postingAccount, client) as any;
-    await account.model.update({ monto: (oldAmount ? oldAmount + newAmount : newAmount) }, {
+    await account.model.update({ monto: (oldAmount ? Number(oldAmount) + Number(newAmount) : newAmount) }, {
         where: {
             numero_de_cliente: client,
             numero_de_cuenta: postingAccount
