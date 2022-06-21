@@ -1,6 +1,7 @@
 import { account } from '../models/account';
 import { transfer } from '../models/transfer';
 import { Request, Response } from 'express';
+import {Sequelize} from 'sequelize';
 
 const getAccounts = async (req: Request, res: Response) => {
     try {
@@ -58,7 +59,9 @@ const getTransfers = async (req: Request, res: Response) => {
         const result = await transfer.model.findAll({
             where: {
                 numero_de_cliente: clientNumber,
-            }
+            },
+            order: Sequelize.literal('timestamp DESC'),
+            limit: 5
         });
         res.json(result);
     } catch (error) {
